@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='django-safe-filefield',
-    version='0.0.0',
+    version='0.1.0',
     url='https://github.com/mixkorshun/django-safe-filefield',
     keywords=['django', 'filefield', 'model-field', 'form-field'],
 
