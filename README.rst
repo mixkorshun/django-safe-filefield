@@ -44,7 +44,7 @@ Add the following settings:
    )
 
 
-.. note:: **django-safe-filefield** require `libmagic` to be installed.
+**django-safe-filefield** require `libmagic` to be installed.
 
 Usage
 -----
