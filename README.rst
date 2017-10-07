@@ -16,13 +16,14 @@ django-safe-filefield
    :alt: MIT
    :target: https://opensource.org/licenses/MIT
 
-Allow you easily check file for extension by content-type
-and detected by content content-type. Useful to user-uploaded files.
+Secure file field, which allows you to restrict uploaded file extensions.
+It may be useful for user-uploaded files (attachments).
 
-This package add model and forms field. What this fields do:
- * restrict allowed file extensions (for example: only *.pdf files)
- * checks file extension is correct for sent content-type
- * checks sent content type is correct for file content (detect by libmagic)
+This package adds model and forms field. What this fields does:
+
+ * restricts allowed file extensions (for example: only *.pdf files)
+ * checks file extensions is correct for sent content-type
+ * checks sent content type is correct for file content (detects by `libmagic`)
 
 Installation
 ------------
