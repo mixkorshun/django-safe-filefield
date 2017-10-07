@@ -32,7 +32,7 @@ The package can be installed using:
 
 .. code-block::
 
-   pip install django-parler
+   pip install django-safe-filefield
 
 
 Add the following settings:
