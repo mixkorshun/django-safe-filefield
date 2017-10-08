@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import ugettext_lazy as _
 
+from . import clamav
 from .utils import detect_content_type
 
 
@@ -79,5 +80,30 @@ class FileContentTypeValidator:
                     'extension': ext,
                     'content_type': file.content_type,
                     'detected_content_type': detected_content_type
+                }
+            )
+
+
+class AntiVirusValidator:
+    message = _('File is infected with %(virus)s.')
+
+    code = 'infected'
+
+    def __init__(self, message=None, code=None):
+        if message is not None:
+            self.message = message
+
+        if code is not None:
+            self.code = code
+
+    def __call__(self, file):
+        status, virus_name = clamav.scan_file(file)
+
+        if status != 'OK':
+            raise ValidationError(
+                self.message,
+                self.code,
+                params={
+                    'virus': virus_name
                 }
             )

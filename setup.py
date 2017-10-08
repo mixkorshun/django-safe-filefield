@@ -21,6 +21,7 @@ setup(
         'django',
 
         'python-magic',
+        'clamd',
     ],
 
     packages=find_packages(exclude=['*.tests.*', '*.tests']),

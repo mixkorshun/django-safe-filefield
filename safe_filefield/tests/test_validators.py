@@ -1,8 +1,14 @@
+import os
+
+import clamd
 import pytest
 from django.core.exceptions import ValidationError
+from django.test import override_settings
 
+from safe_filefield import clamav
 from .utils import get_extras_file, get_uploaded_file
-from ..validators import FileContentTypeValidator, FileExtensionValidator
+from ..validators import AntiVirusValidator, FileContentTypeValidator, \
+    FileExtensionValidator
 
 
 class TestFileExtensionValidator:
@@ -40,3 +46,39 @@ class TestFileContentTypeValidator:
 
         with pytest.raises(ValidationError):
             validator(f)
+
+
+CLAMAV_SOCKET = os.environ.get('CLAMAV_SOCKET', 'unix:///tmp/clamd.sock')
+
+
+class TestAntiVirusValidator:
+    @override_settings(
+        CLAMAV_SOCKET=CLAMAV_SOCKET
+    )
+    def test_infected_file(self):
+        try:
+            clamav.scanner.ping()
+        except clamd.ConnectionError:
+            pytest.skip('Is `clamd` daemon running?')
+
+        f = get_uploaded_file(get_extras_file('infected.dat'))
+
+        validator = AntiVirusValidator()
+
+        with pytest.raises(ValidationError):
+            validator(f)
+
+    @override_settings(
+        CLAMAV_SOCKET=CLAMAV_SOCKET
+    )
+    def test_normal_file(self):
+        try:
+            clamav.scanner.ping()
+        except clamd.ConnectionError:
+            pytest.skip('Is `clamd` daemon running?')
+
+        f = get_uploaded_file(get_extras_file('sample.jpg'))
+
+        validator = AntiVirusValidator()
+
+        validator(f)
