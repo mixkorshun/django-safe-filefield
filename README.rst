@@ -67,7 +67,7 @@ Or to directly to your form:
 
    from safe_filefield.forms import SafeFileField
 
-   class MyForm(forms.Model):
+   class MyForm(forms.Form):
 
        attachment = SafeFileField(
            allowed_extensions=('xls', 'xlsx', 'csv')
