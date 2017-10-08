@@ -1,41 +1,83 @@
 import mimetypes
 import os
 
+from django.core.exceptions import ValidationError
+from django.utils.deconstruct import deconstructible
 from django.utils.translation import ugettext_lazy as _
 
 from .utils import detect_content_type
 
-default_error_messages = {
-    'file_type': _('Sent file type is not allowed. '
-                   'Allowed file types: %(types)s'),
 
-    'file_content_type': _('Wrong file content type. '
-                           'Check your file extension.'),
-}
+@deconstructible
+class FileExtensionValidator(object):
+    message = _(
+        "File extension '%(extension)s' is not allowed. "
+        "Allowed extensions are: '%(allowed_extensions)s'."
+    )
+    code = 'invalid_extension'
+
+    def __init__(self, allowed_extensions=None, message=None, code=None):
+        self.allowed_extensions = allowed_extensions
+
+        if message is not None:
+            self.message = message
+
+        if code is not None:
+            self.code = code
+
+    def __call__(self, value):
+        extension = os.path.splitext(value.name)[1][1:].lower()
+
+        if self.allowed_extensions is not None and extension not in self.allowed_extensions:
+            raise ValidationError(
+                self.message,
+                code=self.code,
+                params={
+                    'extension': extension,
+                    'allowed_extensions': ', '.join(
+                        self.allowed_extensions)
+                }
+            )
 
 
-def has_allowed_extension(f, allowed_extensions):
-    __, ext = os.path.splitext(f.name)
+class FileContentTypeValidator:
+    message = _(
+        'File has invalid content-type. '
+        'Maybe file extension is equal to file content?'
+    )
 
-    return ext in allowed_extensions
+    code = 'invalid_content_type'
 
+    def __init__(self, message=None, code=None):
+        if message is not None:
+            self.message = message
 
-def has_correct_content_type(f, strict=True):
-    __, ext = os.path.splitext(f.name)
+        if code is not None:
+            self.code = code
 
-    if ext not in mimetypes.guess_all_extensions(f.content_type):
-        return False
+    def __call__(self, file):
+        __, ext = os.path.splitext(file.name)
 
-    if strict:
-        detected_content_type = detect_content_type(f)
+        detected_content_type = detect_content_type(file)
 
-        return bool(
+        is_valid_content_type = bool(
             (
-                detected_content_type == 'application/CDFV2-unknown'
-                and f.content_type == mimetypes.guess_type('.doc')
+                ext in mimetypes.guess_all_extensions(file.content_type)
             ) or (
-                detected_content_type == f.content_type
+                detected_content_type == 'application/CDFV2-unknown'
+                and file.content_type == mimetypes.guess_type('.doc')
+            ) or (
+                detected_content_type == file.content_type
             )
         )
-    else:
-        return True
+
+        if not is_valid_content_type:
+            raise ValidationError(
+                self.message,
+                code=self.code,
+                params={
+                    'extension': ext,
+                    'content_type': file.content_type,
+                    'detected_content_type': detected_content_type
+                }
+            )

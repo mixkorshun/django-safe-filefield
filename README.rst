@@ -58,7 +58,7 @@ Simply add field to your model:
    class MyModel(models.Model):
 
        attachment = SafeFileField(
-           allowed_extensions=('.xls', '.xlsx', '.csv')
+           allowed_extensions=('xls', 'xlsx', 'csv')
        )
 
 Or to directly to your form:
@@ -70,7 +70,7 @@ Or to directly to your form:
    class MyForm(forms.Model):
 
        attachment = SafeFileField(
-           allowed_extensions=('.xls', '.xlsx', '.csv')
+           allowed_extensions=('xls', 'xlsx', 'csv')
        )
 
 
