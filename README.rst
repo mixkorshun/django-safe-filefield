@@ -74,6 +74,19 @@ Or directly to your form:
            allowed_extensions=('xls', 'xlsx', 'csv')
        )
 
+Content type checking
++++++++++++++++++++++
+
+To check actual file content type, use `check_content_type` argument. This
+will prevent attacker from uploading malicious file just by changing its
+extension.
+
+.. code-block:: python
+
+   class MyForm(forms.Form):
+       attachment = SafeFileField(
+           check_content_type=True
+       )
 
 ClamAV support
 --------------
