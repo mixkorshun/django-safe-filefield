@@ -89,7 +89,7 @@ extension.
        )
 
 ClamAV support
---------------
+++++++++++++++
 
 .. note:: To use this functionality you should have `clamd` daemon.
 
