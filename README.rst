@@ -40,9 +40,9 @@ Add the following settings:
 
 .. code-block:: python
 
-   INSTALLED_APPS += (
+   INSTALLED_APPS += [
        'safe_filefield',
-   )
+   ]
 
 
 **django-safe-filefield** require `libmagic` to be installed.
