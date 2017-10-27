@@ -40,12 +40,12 @@ Add the following settings:
 
 .. code-block:: python
 
-   INSTALLED_APPS += (
+   INSTALLED_APPS += [
        'safe_filefield',
-   )
+   ]
 
 
-**django-safe-filefield** require `libmagic` to be installed.
+**django-safe-filefield** requires `libmagic` to be installed.
 
 Usage
 -----
@@ -62,7 +62,7 @@ Simply add field to your model:
            allowed_extensions=('xls', 'xlsx', 'csv')
        )
 
-Or to directly to your form:
+Or directly to your form:
 
 .. code-block:: python
 
@@ -74,13 +74,26 @@ Or to directly to your form:
            allowed_extensions=('xls', 'xlsx', 'csv')
        )
 
+Content type checking
++++++++++++++++++++++
+
+To check actual file content type, use `check_content_type` argument. This
+will prevent attacker from uploading malicious file just by changing its
+extension.
+
+.. code-block:: python
+
+   class MyForm(forms.Form):
+       attachment = SafeFileField(
+           check_content_type=True
+       )
 
 ClamAV support
---------------
+++++++++++++++
 
 .. note:: To use this functionality you should have `clamd` daemon.
 
-This package have ability to check uploaded file with ClamAV antivirus.
+This package has ability to check uploaded file with ClamAV antivirus.
 
 To use anti-virus protection simply enable it in your form or model definition:
 
@@ -100,7 +113,7 @@ You can configure some ClamAV settings:
 
    CLAMAV_SOCKET = 'unix://tmp/clamav.sock'  # or tcp://127.0.0.1:3310
 
-   CLAMAV_TIMEOUT = 30  # 30 seconds timeout, by default None which means infinite
+   CLAMAV_TIMEOUT = 30  # 30 seconds timeout, None by default which means infinite
 
 
 Contributing
