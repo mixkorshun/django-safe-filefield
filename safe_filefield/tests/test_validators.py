@@ -47,6 +47,15 @@ class TestFileContentTypeValidator:
         with pytest.raises(ValidationError):
             validator(f)
 
+    def test_incorrect_content_type2(self):
+        f = get_uploaded_file(get_extras_file('sample.png'),
+                              content_type='image/png')
+
+        validator = FileContentTypeValidator()
+
+        with pytest.raises(ValidationError):
+            validator(f)
+
 
 CLAMAV_SOCKET = os.environ.get('CLAMAV_SOCKET', 'unix:///tmp/clamd.sock')
 

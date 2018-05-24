@@ -63,7 +63,8 @@ class FileContentTypeValidator:
 
         is_valid_content_type = bool(
             (
-                ext in mimetypes.guess_all_extensions(file.content_type)
+                ext in mimetypes.guess_all_extensions(detected_content_type)
+                and ext in mimetypes.guess_all_extensions(file.content_type)
             ) or (
                 detected_content_type == 'application/CDFV2-unknown'
                 and file.content_type == mimetypes.guess_type('.doc')

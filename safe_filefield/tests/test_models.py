@@ -33,6 +33,15 @@ class TestSafeFormField:
         with pytest.raises(ValidationError):
             field.clean(f, None)
 
+    def test_invalid_content_type2(self):
+        field = SafeFileField(allowed_extensions=('png',))
+
+        f = get_uploaded_file(get_extras_file('sample.png'),
+                              content_type='image/png')
+
+        with pytest.raises(ValidationError):
+            field.clean(f, None)
+
     def test_formfield(self):
         field = SafeFileField(allowed_extensions=('.jpg',))
 
