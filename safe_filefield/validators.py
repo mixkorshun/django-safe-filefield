@@ -68,8 +68,6 @@ class FileContentTypeValidator:
             ) or (
                 detected_content_type == 'application/CDFV2-unknown'
                 and file.content_type == mimetypes.guess_type('.doc')
-            ) or (
-                detected_content_type == file.content_type
             )
         )
 
