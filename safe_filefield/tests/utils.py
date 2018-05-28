@@ -11,9 +11,12 @@ def get_extras_file(name):
     return os.path.join(extras_dir, name)
 
 
-def get_uploaded_file(filename, content_type=None):
+def get_uploaded_file(filename, content_type=None, upload_name=None):
+    if content_type is False:
+        return UploadedFile(open(filename, 'rb'),
+                upload_name or os.path.basename(filename), None)
     return UploadedFile(
         open(filename, 'rb'),
-        os.path.basename(filename),
+        upload_name or os.path.basename(filename),
         content_type or mimetypes.guess_type(filename)[0]
     )

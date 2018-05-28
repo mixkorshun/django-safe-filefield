@@ -61,26 +61,43 @@ class FileContentTypeValidator:
 
         detected_content_type = detect_content_type(file)
 
-        is_valid_content_type = bool(
-            (
-                ext in mimetypes.guess_all_extensions(file.content_type)
-            ) or (
-                detected_content_type == 'application/CDFV2-unknown'
-                and file.content_type == mimetypes.guess_type('.doc')
-            ) or (
-                detected_content_type == file.content_type
+        if getattr(file, 'content_type', None) is not None:
+            is_valid_content_type = bool(
+                (
+                    ext in mimetypes.guess_all_extensions(detected_content_type)
+                    and ext in mimetypes.guess_all_extensions(file.content_type)
+                ) or (
+                    detected_content_type == 'application/CDFV2-unknown'
+                    and file.content_type == mimetypes.guess_type('.doc')
+                    and ext == "doc"
+                )
             )
-        )
+            params={
+                'extension': ext,
+                'content_type': file.content_type,
+                'detected_content_type': detected_content_type
+            }
+        else:
+            is_valid_content_type = bool(
+                (
+                    ext in mimetypes.guess_all_extensions(detected_content_type)
+                ) or (
+                    detected_content_type == 'application/CDFV2-unknown'
+                    and ext == "doc"
+                )
+            )
+            params={
+                'extension': ext,
+                'content_type': None,
+                'detected_content_type': detected_content_type
+            }
+
 
         if not is_valid_content_type:
             raise ValidationError(
                 self.message,
                 code=self.code,
-                params={
-                    'extension': ext,
-                    'content_type': file.content_type,
-                    'detected_content_type': detected_content_type
-                }
+                params=params
             )
 
 

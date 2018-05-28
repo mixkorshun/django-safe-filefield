@@ -38,9 +38,46 @@ class TestFileContentTypeValidator:
 
         validator(f)
 
+    def test_no_content_type(self):
+        f = get_uploaded_file(get_extras_file('sample.jpg'),
+                              content_type=False)
+
+        validator = FileContentTypeValidator()
+
+        validator(f)
+
     def test_incorrect_content_type(self):
         f = get_uploaded_file(get_extras_file('sample.jpg'),
                               content_type='image/png')
+
+        validator = FileContentTypeValidator()
+
+        with pytest.raises(ValidationError):
+            validator(f)
+
+    def test_incorrect_content_type2(self):
+        f = get_uploaded_file(get_extras_file('sample.jpg'),
+                              content_type='image/png',
+                              upload_name='sample.png')
+
+        validator = FileContentTypeValidator()
+
+        with pytest.raises(ValidationError):
+            validator(f)
+
+    def test_incorrect_content_type3(self):
+        f = get_uploaded_file(get_extras_file('sample.jpg'),
+                              upload_name='sample.png')
+
+        validator = FileContentTypeValidator()
+
+        with pytest.raises(ValidationError):
+            validator(f)
+
+    def test_no_content_type_with_bad_ext(self):
+        f = get_uploaded_file(get_extras_file('sample.jpg'),
+                              content_type=False,
+                              upload_name='sample.png')
 
         validator = FileContentTypeValidator()
 
