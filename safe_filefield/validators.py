@@ -57,6 +57,9 @@ class FileContentTypeValidator:
             self.code = code
 
     def __call__(self, file):
+        if hasattr(file, '_get_file'):
+            file = file._get_file()
+
         __, ext = os.path.splitext(file.name)
 
         detected_content_type = detect_content_type(file)

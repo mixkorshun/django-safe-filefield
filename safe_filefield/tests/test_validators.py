@@ -1,4 +1,5 @@
 import os
+from unittest.mock import Mock
 
 import clamd
 import pytest
@@ -83,6 +84,15 @@ class TestFileContentTypeValidator:
 
         with pytest.raises(ValidationError):
             validator(f)
+
+    def test_not_uploadedfile_instance(self):
+        f = get_uploaded_file(get_extras_file('sample.jpg'))
+        m = Mock()
+        m._get_file = lambda: f
+
+        validator = FileContentTypeValidator()
+
+        validator(m)
 
 
 CLAMAV_SOCKET = os.environ.get('CLAMAV_SOCKET', 'unix:///tmp/clamd.sock')
