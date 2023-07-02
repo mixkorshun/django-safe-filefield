@@ -1,11 +1,11 @@
 django-safe-filefield
 =====================
-.. image:: https://travis-ci.org/mixkorshun/django-safe-filefield.svg?branch=master
-   :alt: build status
-   :target: https://travis-ci.org/mixkorshun/django-safe-filefield
-.. image:: https://codecov.io/gh/mixkorshun/django-safe-filefield/branch/master/graph/badge.svg
-   :alt: code coverage
-   :target: https://codecov.io/gh/mixkorshun/django-safe-filefield
+.. image:: https://github.com/mixkorshun/django-safe-filefield/actions/workflows/flake8.yml/badge.svg?branch=master
+   :alt: flake8
+   :target: https://github.com/mixkorshun/django-safe-filefield
+.. image:: https://github.com/mixkorshun/django-safe-filefield/actions/workflows/pytest.yml/badge.svg?branch=master
+   :alt: pytest
+   :target: https://github.com/mixkorshun/django-safe-filefield
 .. image:: https://badge.fury.io/py/django-safe-filefield.svg
    :alt: pypi
    :target: https://pypi.python.org/pypi/django-safe-filefield

@@ -1,0 +1,19 @@
+name: flake8
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+
+      - name: Install requirements
+        run: |
+          pip -q install flake8
+
+      - name: Run flake8
+        run: |
+          flake8 safe_filefield/

@@ -14,7 +14,7 @@ def get_extras_file(name):
 def get_uploaded_file(filename, content_type=None, upload_name=None):
     if content_type is False:
         return UploadedFile(open(filename, 'rb'),
-                upload_name or os.path.basename(filename), None)
+                            upload_name or os.path.basename(filename), None)
     return UploadedFile(
         open(filename, 'rb'),
         upload_name or os.path.basename(filename),
