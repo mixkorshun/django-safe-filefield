@@ -29,7 +29,8 @@ class FileExtensionValidator(object):
     def __call__(self, value):
         extension = os.path.splitext(value.name)[1][1:].lower()
 
-        if self.allowed_extensions is not None and extension not in self.allowed_extensions:
+        if (self.allowed_extensions is not None) \
+                and (extension not in self.allowed_extensions):
             raise ValidationError(
                 self.message,
                 code=self.code,
@@ -66,35 +67,28 @@ class FileContentTypeValidator:
 
         if getattr(file, 'content_type', None) is not None:
             is_valid_content_type = bool(
-                (
-                    ext in mimetypes.guess_all_extensions(detected_content_type)
-                    and ext in mimetypes.guess_all_extensions(file.content_type)
-                ) or (
-                    detected_content_type == 'application/CDFV2-unknown'
-                    and file.content_type == mimetypes.guess_type('.doc')
-                    and ext == "doc"
-                )
+                (ext in mimetypes.guess_all_extensions(detected_content_type)
+                 and ext in mimetypes.guess_all_extensions(file.content_type)
+                 ) or (detected_content_type == 'application/CDFV2-unknown'
+                       and file.content_type == mimetypes.guess_type('.doc')
+                       and ext == "doc")
             )
-            params={
+            params = {
                 'extension': ext,
                 'content_type': file.content_type,
                 'detected_content_type': detected_content_type
             }
         else:
             is_valid_content_type = bool(
-                (
-                    ext in mimetypes.guess_all_extensions(detected_content_type)
-                ) or (
-                    detected_content_type == 'application/CDFV2-unknown'
-                    and ext == "doc"
-                )
+                (ext in mimetypes.guess_all_extensions(detected_content_type))
+                or (detected_content_type == 'application/CDFV2-unknown'
+                    and ext == "doc")
             )
-            params={
+            params = {
                 'extension': ext,
                 'content_type': None,
                 'detected_content_type': detected_content_type
             }
-
 
         if not is_valid_content_type:
             raise ValidationError(
